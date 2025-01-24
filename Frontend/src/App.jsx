@@ -8,6 +8,7 @@ import DailyPrice from './pages/DailyPricePage/DailyPrice';
 import FoodDetection from './pages/FoodDetection/FoodDetection';
 import Recipe from './pages/Recipe/Recipe';
 import FoodDonation from './pages/FoodDonation/FoodDonation';
+import Ngo from './pages/NGO_Page/Ngo';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/FoodDetection" element={<FoodDetection/>} />
           <Route path="/recipe" element={<Recipe/>} />
           <Route path="/donation" element={<FoodDonation/>} />
+          <Route path="/ngo" element={<Ngo/>} />
 
           
         </Routes>
