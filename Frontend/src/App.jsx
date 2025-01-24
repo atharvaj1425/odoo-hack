@@ -1,17 +1,33 @@
-import { useState } from 'react'
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
+import HomePage from './pages/Homepage/HomePage'
+import ConsumerPage from './pages/ConsumerPage/ConsumerPage';
+import RetailerPage from './pages/RetailerPage/RetailerPage';
+
+import DailyPrice from './pages/DailyPricePage/DailyPrice';
+import FoodDetection from './pages/FoodDetection/FoodDetection';
+import Recipe from './pages/Recipe/Recipe';
+import FoodDonation from './pages/FoodDonation/FoodDonation';
+
 
 function App() {
-
   return (
-    <>
-      <div className='bg-red-400'>
-        <h1 className='bg-slate-400 text-xl text-red-600 px-5 py-7'>Hello world</h1>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/consumer" element={<ConsumerPage />} />
+          <Route path="/retailer" element={<RetailerPage />} />
+          <Route path="/daily-price" element={<DailyPrice/>} />
+          <Route path="/FoodDetection" element={<FoodDetection/>} />
+          <Route path="/recipe" element={<Recipe/>} />
+          <Route path="/donation" element={<FoodDonation/>} />
+
+          
+        </Routes>
       </div>
-     
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
