@@ -25,7 +25,7 @@ const Sidebar = () => {
           <Link to="/FoodDetection">
             <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
               <SlCalender className="mr-3 text-2xl" />
-              Food Detection
+             Add Food Items
             </li>
           </Link>
 
