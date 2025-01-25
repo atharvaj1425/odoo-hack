@@ -22,10 +22,10 @@ const Sidebar = () => {
             Dashboard
           </li>
 
-          <Link to="/FoodDetection">
+          <Link to="/recipe">
             <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
               <SlCalender className="mr-3 text-2xl" />
-              Add Food Items
+               Recipe
             </li>
           </Link>
 
@@ -36,7 +36,7 @@ const Sidebar = () => {
 
           <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
             <IoFastFood className="mr-3 text-2xl" />
-            Recipe
+            Add Food Items
           </li>
 
           <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
