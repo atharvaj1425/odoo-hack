@@ -9,6 +9,8 @@ import FoodDetection from './pages/FoodDetection/FoodDetection';
 import Recipe from './pages/Recipe/Recipe';
 import FoodDonation from './pages/FoodDonation/FoodDonation';
 import Ngo from './pages/NGO_Page/Ngo';
+import { ChakraProvider } from '@chakra-ui/react';
+
 
 
 function App() {
