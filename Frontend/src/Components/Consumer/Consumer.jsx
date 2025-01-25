@@ -5,7 +5,9 @@ const foodItems = [
       { food: "Chicken", expiry: "Feb. 12, 2025", status: "Good" },
       { food: "Cheese ", expiry: "Jan. 19, 2025", status: "Expiring Soon" },
       { food: "Milk", expiry: "Jan. 12, 2025", status: "Expired" },
-      { food: "Vegtables", expiry: "Jan. 25, 2025", status: "Good" },
+     
+       { food: "Vegtables", expiry: "Jan. 25, 2025", status: "Good" },
+       { food: "Butter", expiry: "Jan. 29, 2025", status: "Good" },
     ];
 
   return (

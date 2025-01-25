@@ -5,6 +5,9 @@ import { FaMapMarkerAlt, FaLock } from "react-icons/fa";
 import { FaHandsHelping } from "react-icons/fa";
 import { FaTractor } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import axios from 'axios';
 const Login = () => {
   const [retailerState, setRetailerState] = useState("login");
@@ -28,37 +31,61 @@ const Login = () => {
   const [farmerPassword, setFarmerPassword] = useState("");
   const [farmerUsername, setFarmerUsername] = useState("");
 
+
+ 
+
   const navigate = useNavigate()
   // const { user, setUser } = useContext(UserDataContext)
 
   const submitHandler = async (e) => {
     e.preventDefault();
+  
+    // Check for empty fields
+    if (!consumerEmail || !consumerPassword || (consumerState === "signup" && !consumerUsername)) {
+      toast.error("Please fill in all the fields");
+      return; // Stop execution if any field is empty
+    }
+  
     const userData = consumerState === "signup"
       ? { email: consumerEmail, password: consumerPassword, username: consumerUsername }
       : { email: consumerEmail, password: consumerPassword };
-
+  
     console.log("Submitting Consumer Data:", userData);
+  
     try {
-      const response = await axios.post(
-        "/api/v1/users/login",
-        userData
-      );
-
+      const response = await axios.post("/api/v1/users/login", userData);
+  
+      // Inside the login component after successful login:
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
-        navigate("/consumer");
-      } else {
+  
+        // Store success message in localStorage
+        localStorage.setItem("loginSuccess", "Logged in Successfully !");
+        localStorage.setItem("userEmail", consumerEmail);
+  
+        // Display the toast success message before navigating
+        toast.success("Logged in Successfully");
+  
+        // Delay the navigation to ensure toast shows up
+        setTimeout(() => {
+          navigate("/consumer");
+        }, 1000); // Adjust the timeout as needed (e.g., 1500ms = 1.5s)
+      }
+else {
         console.error("Error:", response.statusText);
+        toast.error("Invalid Credentials");
       }
     } catch (error) {
       console.error("Error during API call:", error);
+      toast.error("Invalid Credentials");
     } finally {
       setConsumerEmail("");
       setConsumerPassword("");
       if (consumerState === "signup") setConsumerUsername("");
     }
   };
+  
 
 
   const ngoSubmitHandler = async (e) => {
@@ -77,12 +104,25 @@ const Login = () => {
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
-        navigate("/ngo");
+  
+        // Store success message in localStorage
+        localStorage.setItem("loginSuccess", "Logged in Successfully !");
+        localStorage.setItem("userEmail", ngoEmail);
+  
+        // Display the toast success message before navigating
+        toast.success("Logged in Successfully");
+  
+        // Delay the navigation to ensure toast shows up
+        setTimeout(() => {
+          navigate("/ngo");
+        }, 1000); // Adjust the timeout as needed (e.g., 1500ms = 1.5s)
       } else {
         console.error("Error:", response.statusText);
+        toast.error("Invalid Credentials");
       }
     } catch (error) {
       console.error("Error during API call:", error);
+      toast.error("Invalid Credentials");
     } finally {
       setNgoEmail("");
       setNgoPassword("");
@@ -104,16 +144,28 @@ const Login = () => {
         "/api/v1/restaurants/login", 
         retailerData
       );
-
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
-        navigate("/retailer");  // Navigate to the retailer dashboard
+  
+        // Store success message in localStorage
+        localStorage.setItem("loginSuccess", "Logged in Successfully !");
+        localStorage.setItem("userEmail", retailerEmail);
+  
+        // Display the toast success message before navigating
+        toast.success("Logged in Successfully");
+  
+        // Delay the navigation to ensure toast shows up
+        setTimeout(() => {
+          navigate("/retailer");
+        }, 1000); // Adjust the timeout as needed (e.g., 1500ms = 1.5s)
       } else {
         console.error("Error:", response.statusText);
+        toast.error("Invalid Credentials");
       }
     } catch (error) {
       console.error("Error during API call:", error);
+      toast.error("Invalid Credentials");
     } finally {
       setRetailerEmail("");
       setRetailerPassword("");
@@ -139,7 +191,17 @@ const Login = () => {
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
-        navigate("/farmer-dashboard");  // Navigate to the farmer dashboard
+  
+        // Store success message in localStorage
+        localStorage.setItem("loginSuccess", "Logged in Successfully !");
+  
+        // Display the toast success message before navigating
+        toast.success("Logged in Successfully");
+  
+        // Delay the navigation to ensure toast shows up
+        setTimeout(() => {
+          navigate("/consumer");
+        }, 1000); // Adjust the timeout as needed (e.g., 1500ms = 1.5s)
       } else {
         console.error("Error:", response.statusText);
       }
@@ -454,6 +516,7 @@ const Login = () => {
 
         </div>
       </div>
+       <ToastContainer />
     </div>
   );
 };

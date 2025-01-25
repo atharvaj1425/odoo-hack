@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 import Sidebar from '../../Components/Restaurant/SideBar';
 import Header from "../../Components/Restaurant/Header_1";
 import FoodItemsTable from '../../Components/Restaurant/FoodItemsTable';
 import AIRecipe from '../../Components/Restaurant/AIRecipe';
 import NavBar from "../../Components/Restaurant/NavBar";
 import Analytics from "../../Components/Restaurant/Analytics";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RetailerPage = () => {
+  useEffect(() => {
+      const successMessage = localStorage.getItem("loginSuccess");
+  
+      if (successMessage) {
+        toast.success(successMessage);
+  
+        // Remove the message from localStorage so it doesn't show again on refresh
+        localStorage.removeItem("loginSuccess");
+      }
+    }, []); 
   return (
     <div className="animate-fadeIn">
       <NavBar />
@@ -32,6 +45,7 @@ const RetailerPage = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

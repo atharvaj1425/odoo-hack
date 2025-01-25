@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import NavBar from '../../Components/NGO/Navbar'
 import Analytics from '../../Components/NGO/Analytics'
 import Header from '../../Components/NGO/Header'
 import Map from '../../Components/NGO/Map'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Ngo = () => {
+  useEffect(() => {
+      const successMessage = localStorage.getItem("loginSuccess");
+  
+      if (successMessage) {
+        toast.success(successMessage);
+  
+        // Remove the message from localStorage so it doesn't show again on refresh
+        localStorage.removeItem("loginSuccess");
+      }
+    }, []); 
   return (
     <>
     <NavBar/>
@@ -12,7 +24,7 @@ const Ngo = () => {
         <Header/>
         <Analytics/>
         <Map/>
-   
+   <ToastContainer/>
     </div>
     </>
     

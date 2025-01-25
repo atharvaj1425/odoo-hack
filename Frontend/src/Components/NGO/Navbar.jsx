@@ -1,8 +1,19 @@
-import React from 'react';
+
+import React, { useEffect,useState } from 'react';
+
 import { FaHotel } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
 
 const NavBar = () => {
+  const [userEmail, setUserEmail] = useState("");
+  
+    useEffect(() => {
+      // Retrieve email from localStorage when the component is mounted
+      const email = localStorage.getItem("userEmail");
+      if (email) {
+        setUserEmail(email); 
+      }
+    }, []);
   return (
     <div className="flex bg-white p-4 rounded-lg border-2 border-black shadow-lg mt-15 w-full justify-between">
       <div className="flex items-center">
@@ -32,7 +43,7 @@ const NavBar = () => {
       <div className="flex items-center">
       {/* Login Image beside APMC */}
       <img src="/login.png" alt="Login" className="w-12 h-12 mr-2" />
-      <div className="text-lg font-bold">NGO</div>
+      <div className="text-lg font-bold">{userEmail ? userEmail : "Guest"}</div>
     </div>
     </div>
   );

@@ -1,27 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch }) => {
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleSearch = () => {
+    if (searchInput.trim()) {
+      onSearch(searchInput);
+    }
+  };
+
   return (
     <div
-      className="bg-cover bg-center h-64 flex flex-col justify-center items-center text-center"
-      style={{ backgroundImage: 'url("/bg.jpg")' }} 
+      className="flex justify-center items-center py-8 bg-cover bg-center h-80"
+      style={{ backgroundImage: 'url(/bg.jpg)' }}
     >
-      <h2 className="text-white text-3xl font-bold mb-4">
-        Discover Deliciousness, One Recipe at a Time!
-      </h2>
-      <div className="flex">
-        <input
-          type="text"
-          placeholder="Search recipes here ..."
-          className="w-64 p-2 rounded-l-lg border border-gray-300 focus:outline-none"
-        />
-        <button className="bg-green-600 px-4 py-2 rounded-r-lg flex items-center justify-center">
-          <img
-            src="/code.png" 
-            alt="Search"
-            className="h-6 w-6"
+      <div className="text-center">
+        <div className="text-white text-3xl font-semibold mb-11 mt-2">
+        Let’s Chat, Cook, and Savor – Your Recipe Adventure Starts Here!
+        </div>
+        
+        <div className="flex items-center rounded-lg shadow-lg w-full max-w-3xl">
+          <input
+            type="text"
+            className="p-3 w-full rounded-l-lg focus:outline-none text-gray-700"
+            placeholder="Enter an ingredient"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-        </button>
+          <button
+            type="button"
+            className="p-3 bg-green-500 text-white rounded-r-lg hover:bg-green-600 focus:outline-none"
+            onClick={handleSearch}
+          >
+            <img src="/code.png" alt="Search" className="w-6 h-6 object-contain" />
+          </button>
+        </div>
       </div>
     </div>
   );
