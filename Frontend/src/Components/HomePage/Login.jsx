@@ -101,14 +101,14 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        retailerState === "signup" ? "/api/v1/retailers/signup" : "/api/v1/retailers/login",
+        "/api/v1/restaurants/login",
         retailerData
       );
 
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
-        navigate("/retailer-dashboard");  // Navigate to the retailer dashboard
+        navigate("/retailer");  // Navigate to the retailer dashboard
       } else {
         console.error("Error:", response.statusText);
       }

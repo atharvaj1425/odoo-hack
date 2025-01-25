@@ -15,10 +15,13 @@ app.use(express.static("public"));
 
 
 import userRouter from "./routes/user.routes.js";
+import ngoRouter from "./routes/ngo.routes.js";
+import restaurantRouter from "./routes/restaurants.routes.js"
 
 //routes declaration
 app.use("/api/v1/users", userRouter);
-
+app.use("/api/v1/ngos", ngoRouter);
+app.use("/api/v1/restaurants", restaurantRouter);
 
 // export default app;
 export { app }; 
