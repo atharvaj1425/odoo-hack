@@ -101,7 +101,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "/api/v1/restaurants/login",
+        "/api/v1/restaurants/login", 
         retailerData
       );
 
