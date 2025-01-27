@@ -169,5 +169,4 @@ const addFoodItem = asyncHandler(async (req, res) => {
 });
 
 
-
-export { loginUser, getFoodItems, addFoodItem }
+export { loginUser, addFoodItem }
