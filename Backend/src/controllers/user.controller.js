@@ -193,5 +193,37 @@ const addFoodItem = asyncHandler(async(req, res) => {
         res.status(201).json(newFoodItem);
 });
 
+const getFoodItems = asyncHandler(async (req, res) => {
+    const userId = req.user._id; // Assuming req.user is populated by authentication middleware
 
-export { loginUser, addFoodItem }
+    const foodItems = await FoodItem.find({ user: userId });
+
+    // Update statuses for all food items
+    const updatedFoodItems = await Promise.all(
+        foodItems.map(async (item) => {
+            const today = new Date();
+            const expiry = new Date(item.expiryDate);
+            const diffTime = expiry - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let newStatus = "";
+            if (diffDays > 7) newStatus = "good";
+            else if (diffDays <= 7 && diffDays >= 0) newStatus = "expiring soon";
+            else newStatus = "expired";
+
+            if (item.status !== newStatus) {
+                await FoodItem.findByIdAndUpdate(
+                    item._id,
+                    { $set: { status: newStatus } },
+                    { new: true }
+                );
+            }
+
+            return { ...item._doc, status: newStatus };
+        })
+    );
+
+    return res.status(200).json(new ApiResponse(200, updatedFoodItems, "Food items fetched successfully"));
+});
+
+export { loginUser, addFoodItem , getFoodItems}

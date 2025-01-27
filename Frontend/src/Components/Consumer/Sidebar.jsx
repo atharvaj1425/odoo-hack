@@ -34,10 +34,13 @@ const Sidebar = () => {
             Real-time Analysis
           </li>
 
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
-            <IoFastFood className="mr-3 text-2xl" />
-            Add Food Items
-          </li>
+          <Link to="/form">
+  <li className="flex items-center hover:text-green-400 cursor-pointer  mt-7 px-1 py-2 rounded-lg">
+    <IoFastFood className="mr-3 text-2xl" />
+    Add Food Items
+  </li>
+</Link>
+
 
           <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
             <GiTrophiesShelf className="mr-3 text-2xl" />

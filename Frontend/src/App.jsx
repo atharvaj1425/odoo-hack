@@ -22,7 +22,7 @@ function App() {
           <Route path="/consumer" element={<ConsumerPage />} />
           <Route path="/retailer" element={<RetailerPage />} />
           <Route path="/daily-price" element={<DailyPrice/>} />
-          <Route path="/FoodDetection" element={<FoodDetection/>} />
+          <Route path="/form" element={<FoodDetection/>} />
           <Route path="/recipe" element={<Recipe/>} />
           <Route path="/donation" element={<FoodDonation/>} />
           <Route path="/ngo" element={<Ngo/>} />

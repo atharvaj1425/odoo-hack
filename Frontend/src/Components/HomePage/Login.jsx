@@ -43,7 +43,7 @@ const Login = () => {
     // Check for empty fields
     if (!consumerEmail || !consumerPassword || (consumerState === "signup" && !consumerUsername)) {
       toast.error("Please fill in all the fields");
-      return; // Stop execution if any field is empty
+      return;
     }
   
     const userData = consumerState === "signup"
@@ -55,24 +55,44 @@ const Login = () => {
     try {
       const response = await axios.post("/api/v1/users/login", userData);
   
-      // Inside the login component after successful login:
       if (response.status === 200) {
         const data = response.data;
-        console.log("Response Data:", data);
+        console.log("Response Data:", data.data);
+
+
+        try {
+          localStorage.setItem("foodItems", JSON.stringify(data.data.updatedFoodItems)); 
+          console.log("Full response data saved to localStorage:", data.data.updatedFoodItems);
+        } catch (error) {
+          console.error("Error saving data to localStorage:", error);
+        }
   
-        // Store success message in localStorage
+        // if (data.updatedFoodItems && Array.isArray(data.updatedFoodItems)) {
+        //   const formattedFoodItems = data.updatedFoodItems.map(item => ({
+        //    expiryDate:item.expiryDate,
+        //    manufacturingDate:item.manufacturingDate,
+        //    name:item.name,
+        //    status:item.status,
+
+        //   }));
+  
+        //   // Store the formatted food items in localStorage
+        //   localStorage.setItem("foodItems", JSON.stringify(formattedFoodItems));
+        //   console.log("Formatted food items saved to localStorage:", formattedFoodItems);
+        // } else {
+        //   console.warn("No valid updated food items or not in array format.", data.updatedFoodItems);
+        // }
+  
+        // Store other relevant data
         localStorage.setItem("loginSuccess", "Logged in Successfully !");
         localStorage.setItem("userEmail", consumerEmail);
   
-        // Display the toast success message before navigating
         toast.success("Logged in Successfully");
   
-        // Delay the navigation to ensure toast shows up
         setTimeout(() => {
           navigate("/consumer");
-        }, 1000); // Adjust the timeout as needed (e.g., 1500ms = 1.5s)
-      }
-else {
+        }, 1000);
+      } else {
         console.error("Error:", response.statusText);
         toast.error("Invalid Credentials");
       }
@@ -85,6 +105,7 @@ else {
       if (consumerState === "signup") setConsumerUsername("");
     }
   };
+  
   
 
 
