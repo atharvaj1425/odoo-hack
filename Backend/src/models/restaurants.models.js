@@ -12,11 +12,14 @@ const restaurantSchema = new mongoose.Schema({
         index: true
     },
     password: {
-            type: String,
-            required: true,
-            unique: true,
-            
-        },
+        type: String,
+        required: true,
+        unique: true,
+    },
+    pincode: {
+        type: Number,
+        required: true,
+    }
 }, {
     timestamps: true
 }) 
