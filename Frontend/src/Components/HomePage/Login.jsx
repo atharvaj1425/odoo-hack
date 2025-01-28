@@ -40,7 +40,7 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
   
-    // Check for empty fields
+   
     if (!consumerEmail || !consumerPassword || (consumerState === "signup" && !consumerUsername)) {
       toast.error("Please fill in all the fields");
       return;
@@ -171,7 +171,7 @@ const Login = () => {
   
         // Store success message in localStorage
         localStorage.setItem("loginSuccess", "Logged in Successfully !");
-        localStorage.setItem("userEmail", retailerEmail);
+        localStorage.setItem("userEmail", data.data.user.name);
   
         // Display the toast success message before navigating
         toast.success("Logged in Successfully");

@@ -137,19 +137,31 @@ const addFoodItem = asyncHandler(async (req, res) => {
     res.status(201).json(newFoodItem);
 });
 
-const donateFoodItem = asyncHandler(async(req, res) => {
-    const { foodName, quantity, expiryDate, schedulePickUp } = req.body;
-    if(!(foodName && quantity && expiryDate && schedulePickUp )) {
+const donateFoodItem = asyncHandler(async (req, res) => {
+    const { foodName, quantity, expiryDate, schedulePickUp, foodType } = req.body;
+
+    // Validate presence of all fields
+    if (!(foodName && quantity && expiryDate && schedulePickUp && foodType)) {
         throw new ApiError(400, "All fields are required");
     }
-    const currentDate = new Date();
-    const inputExpiryDate = new Date(expiryDate);
 
-    if (inputExpiryDate <= currentDate) {
+    // Validate date formats
+    const parsedExpiryDate = Date.parse(expiryDate);  // Using Date.parse to get UTC timestamp
+    const parsedSchedulePickUp = Date.parse(schedulePickUp);  // Using Date.parse to get UTC timestamp
+
+    if (isNaN(parsedExpiryDate) || isNaN(parsedSchedulePickUp)) {
+        throw new ApiError(400, "Invalid date format for expiryDate or schedulePickUp");
+    }
+
+    const currentDate = new Date();
+    if (parsedExpiryDate <= currentDate) {
         throw new ApiError(400, "Expiry date must be at least one day greater than the current date");
     }
 
-    // Continue with the rest of the donation logic
+    // Proceed with the rest of the logic
+    const schedulePickUpISO = new Date(parsedSchedulePickUp).toISOString(); // Convert back to ISO string
+    const expiryDateISO = new Date(parsedExpiryDate).toISOString();  // Convert back to ISO string
+
     const restaurant = await Restaurant.findById(req.user._id).select("name pincode");
 
     if (!restaurant) {
@@ -159,16 +171,16 @@ const donateFoodItem = asyncHandler(async(req, res) => {
     const foodDonation = new FoodDonation({
         foodName,
         quantity,
-        expiryDate: inputExpiryDate,
-        schedulePickUp,
+        foodType,
+        expiryDate: expiryDateISO,
+        schedulePickUp: schedulePickUpISO,
         restaurantUser: req.user._id,
         restaurantName: restaurant.name,
-        restaurantPincode: restaurant.pincode
+        restaurantPincode: restaurant.pincode,
     });
 
     await foodDonation.save();
 
     return res.status(201).json(new ApiResponse(201, foodDonation, "Food item donated successfully"));
-})
-
+});
 export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem } 
