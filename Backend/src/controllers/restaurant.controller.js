@@ -61,7 +61,8 @@ const loginRestaurantUser = asyncHandler(async(req, res) => {
 const getFoodItems = asyncHandler(async (req, res) => {
     const userId = req.user._id; // Assuming `req.user` is populated by authentication middleware
 
-    const foodItems = await RestaurantFoodItem.find({ user: userId });
+    const foodItems = await RestaurantFoodItem.find({ restaurantUser: userId });
+
 
     // Update statuses for all food items
     const updatedFoodItems = await Promise.all(
@@ -149,7 +150,8 @@ const donateFoodItem = asyncHandler(async(req, res) => {
     }
 
     // Continue with the rest of the donation logic
-    const restaurant = await Restaurant.findById(req.user._id);
+    const restaurant = await Restaurant.findById(req.user._id).select("name pincode");
+
     if (!restaurant) {
         throw new ApiError(404, "Restaurant not found");
     }

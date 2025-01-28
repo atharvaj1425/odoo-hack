@@ -4,7 +4,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const ngoSchema = new mongoose.Schema({
-    
+    name: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
@@ -12,11 +15,14 @@ const ngoSchema = new mongoose.Schema({
         index: true
     },
     password: {
-            type: String,
-            required: true,
-            unique: true,
-            
-        },
+        type: String,
+        required: true,
+        unique: true,     
+    },
+    pincode: {
+        type: Number,
+        required: true,
+    },
 }, {
     timestamps: true
 }) 

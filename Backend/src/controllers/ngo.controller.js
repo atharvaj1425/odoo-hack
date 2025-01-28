@@ -1,11 +1,11 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Ngo } from "../models/ngo.models.js"
+import { FoodDonation } from "../models/fooddonation.models.js";
 //import { uploadToCloudinary  } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-
 
 const generateAccessToken = async(userId) => {
     try{
@@ -56,4 +56,24 @@ const loginNgoUser = asyncHandler(async(req, res) => {
     )
 })
 
-export { loginNgoUser } 
+const getFoodDonations = asyncHandler(async(req, res) => {
+    const userId = req.user._id;
+    const ngo = await Ngo.findById(userId);
+    console.log(ngo);
+    const ngoPincode = ngo.pincode;
+    console.log(ngoPincode);
+    const minPincode = ngoPincode - 5;
+    console.log(minPincode);
+    const maxPincode = ngoPincode + 5;
+    console.log(maxPincode);
+
+    const donationsNearBy = await FoodDonation.find({
+        restaurantPincode: { $gte: minPincode, $lte: maxPincode }
+    });
+    console.log(donationsNearBy)
+
+    return res.status(200).json(
+        new ApiResponse(200, donationsNearBy, "Food donations fetched successfully")
+    );
+});
+export { loginNgoUser, getFoodDonations } 
