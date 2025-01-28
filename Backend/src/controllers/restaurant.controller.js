@@ -137,11 +137,9 @@ const addFoodItem = asyncHandler(async (req, res) => {
     res.status(201).json(newFoodItem);
 });
 
-const donateFoodItem = asyncHandler(async (req, res) => {
-    const { foodName, quantity, expiryDate, schedulePickUp, foodType } = req.body;
-
-    // Validate presence of all fields
-    if (!(foodName && quantity && expiryDate && schedulePickUp && foodType)) {
+const donateFoodItem = asyncHandler(async(req, res) => {
+    const { foodName, quantity, expiryDate, schedulePickUp } = req.body;
+    if(!(foodName && quantity && expiryDate && schedulePickUp )) {
         throw new ApiError(400, "All fields are required");
     }
 
@@ -154,7 +152,9 @@ const donateFoodItem = asyncHandler(async (req, res) => {
     }
 
     const currentDate = new Date();
-    if (parsedExpiryDate <= currentDate) {
+    const inputExpiryDate = new Date(expiryDate);
+
+    if (inputExpiryDate <= currentDate) {
         throw new ApiError(400, "Expiry date must be at least one day greater than the current date");
     }
 
@@ -171,16 +171,17 @@ const donateFoodItem = asyncHandler(async (req, res) => {
     const foodDonation = new FoodDonation({
         foodName,
         quantity,
-        foodType,
-        expiryDate: expiryDateISO,
-        schedulePickUp: schedulePickUpISO,
+        expiryDate: inputExpiryDate,
+        schedulePickUp,
         restaurantUser: req.user._id,
         restaurantName: restaurant.name,
         restaurantPincode: restaurant.pincode,
     });
+    console.log(foodDonation)
 
     await foodDonation.save();
 
     return res.status(201).json(new ApiResponse(201, foodDonation, "Food item donated successfully"));
-});
+})
+
 export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem } 
