@@ -138,12 +138,14 @@ const addFoodItem = asyncHandler(async (req, res) => {
 });
 
 const donateFoodItem = asyncHandler(async(req, res) => {
-    const { foodName, quantity, expiryDate, schedulePickUp } = req.body;
-    if(!(foodName && quantity && expiryDate && schedulePickUp )) {
+    const { foodName, quantity, expiryDate, schedulePickUp, foodType } = req.body;
+    const schedulePickUpISO = new Date(schedulePickUp).toISOString();
+    const expiryDateISO = new Date(expiryDate).toISOString();
+    if(!(foodName && quantity && expiryDate && schedulePickUp && foodType )) {
         throw new ApiError(400, "All fields are required");
     }
     const currentDate = new Date();
-    const inputExpiryDate = new Date(expiryDate);
+    const inputExpiryDate = new Date(expiryDateISO);
 
     if (inputExpiryDate <= currentDate) {
         throw new ApiError(400, "Expiry date must be at least one day greater than the current date");
@@ -159,16 +161,26 @@ const donateFoodItem = asyncHandler(async(req, res) => {
     const foodDonation = new FoodDonation({
         foodName,
         quantity,
+        foodType,
         expiryDate: inputExpiryDate,
-        schedulePickUp,
+        schedulePickUp: schedulePickUpISO,
         restaurantUser: req.user._id,
         restaurantName: restaurant.name,
         restaurantPincode: restaurant.pincode
     });
+    console.log(foodDonation)
 
     await foodDonation.save();
 
     return res.status(201).json(new ApiResponse(201, foodDonation, "Food item donated successfully"));
 })
 
-export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem } 
+const foodDonationHistory = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    console.log(userId);
+    const donationHistory = await FoodDonation.find({restaurantUser: userId});
+    console.log(donationHistory);
+    return res.status(200).json(new ApiResponse(200, donationHistory, "Food donation history fetched successfully"));
+})
+
+export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem, foodDonationHistory } 

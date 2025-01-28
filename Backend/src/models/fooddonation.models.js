@@ -9,6 +9,10 @@ const foodDonationSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    foodType: {
+        type: String,
+        required: true
+    }, 
     expiryDate: {
         type: Date,
         required: true,
@@ -29,6 +33,11 @@ const foodDonationSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "Restaurant",
         required: true
+    },
+    status: { 
+        type: String, 
+        enum: ["Pending", "Accepted", "Out for Delivery", "Completed", "Expired"], 
+        default: "Pending" 
     }
 }, {
     timestamps: true

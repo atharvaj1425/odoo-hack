@@ -68,7 +68,8 @@ const getFoodDonations = asyncHandler(async(req, res) => {
     console.log(maxPincode);
 
     const donationsNearBy = await FoodDonation.find({
-        restaurantPincode: { $gte: minPincode, $lte: maxPincode }
+        restaurantPincode: { $gte: minPincode, $lte: maxPincode },
+        status: "Pending"
     });
     console.log(donationsNearBy)
 
