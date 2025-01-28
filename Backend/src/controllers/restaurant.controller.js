@@ -77,7 +77,7 @@ const getFoodItems = asyncHandler(async (req, res) => {
             else newStatus = "expired";
 
             if (item.status !== newStatus) {
-                await FoodItem.findByIdAndUpdate(
+                await RestaurantFoodItem.findByIdAndUpdate(
                     item._id,
                     { $set: { status: newStatus } },
                     { new: true }

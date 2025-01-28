@@ -7,7 +7,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
-
 const generateAccessToken = async(userId) => {
     try{
         const user = await User.findById(userId);
@@ -164,6 +163,5 @@ const addFoodItem = asyncHandler(async (req, res) => {
 
     res.status(201).json(newFoodItem);
 });
-
 
 export { loginUser, addFoodItem, getFoodItems }
