@@ -21,7 +21,6 @@ const generateAccessToken = async(userId) => {
     }
 } 
 
-
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -121,8 +120,6 @@ const getFoodItems = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, updatedFoodItems, "Food items fetched successfully"));
 });
 
-
-
 const addFoodItem = asyncHandler(async (req, res) => {
     const updateFoodItemStatus = (expiryDate) => {
         const today = new Date();
@@ -169,4 +166,4 @@ const addFoodItem = asyncHandler(async (req, res) => {
 });
 
 
-export { loginUser, addFoodItem }
+export { loginUser, addFoodItem, getFoodItems }

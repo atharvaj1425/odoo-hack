@@ -4,7 +4,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const restaurantSchema = new mongoose.Schema({
-    
+    name: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
