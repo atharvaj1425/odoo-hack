@@ -10,6 +10,7 @@ import Recipe from './pages/Recipe/Recipe';
 import FoodDonation from './pages/FoodDonation/FoodDonation';
 import Ngo from './pages/NGO_Page/Ngo';
 import { ChakraProvider } from '@chakra-ui/react';
+import Donation_page from './pages/DonationPage/Donation_page';
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/recipe" element={<Recipe/>} />
           <Route path="/donation" element={<FoodDonation/>} />
           <Route path="/ngo" element={<Ngo/>} />
+          <Route path="/donate" element={<Donation_page/>} />
 
           
         </Routes>

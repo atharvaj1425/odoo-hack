@@ -59,7 +59,7 @@ const loginRestaurantUser = asyncHandler(async(req, res) => {
 })
 
 const getFoodItems = asyncHandler(async (req, res) => {
-    const userId = req.user._id; // Assuming `req.user` is populated by authentication middleware
+    const userId = req.user._id; // Assuming req.user is populated by authentication middleware
 
     const foodItems = await RestaurantFoodItem.find({ restaurantUser: userId });
 
@@ -137,43 +137,58 @@ const addFoodItem = asyncHandler(async (req, res) => {
     res.status(201).json(newFoodItem);
 });
 
-const donateFoodItem = asyncHandler(async(req, res) => {
+const donateFoodItem = asyncHandler(async (req, res) => {
     const { foodName, quantity, expiryDate, schedulePickUp, foodType } = req.body;
-    const schedulePickUpISO = new Date(schedulePickUp).toISOString();
-    const expiryDateISO = new Date(expiryDate).toISOString();
-    if(!(foodName && quantity && expiryDate && schedulePickUp && foodType )) {
-        throw new ApiError(400, "All fields are required");
+  
+    // Log to verify the incoming data format
+    console.log("Received expiryDate:", expiryDate);
+    console.log("Received schedulePickUp:", schedulePickUp);
+  
+    // Ensure all fields are provided
+    if (!(foodName && quantity && expiryDate && schedulePickUp && foodType)) {
+      throw new ApiError(400, "All fields are required");
     }
+  
+    // Convert dates from DD/MM/YYYY to ISO format (YYYY-MM-DD)
+    const [expiryDay, expiryMonth, expiryYear] = expiryDate.split("/").map(Number);
+    const [pickupDay, pickupMonth, pickupYear] = schedulePickUp.split("/").map(Number);
+  
+    const expiryDateISO = new Date(expiryYear, expiryMonth - 1, expiryDay);
+    const schedulePickUpISO = new Date(pickupYear, pickupMonth - 1, pickupDay);
+  
+    if (isNaN(expiryDateISO.getTime()) || isNaN(schedulePickUpISO.getTime())) {
+      throw new ApiError(400, "Invalid date format");
+    }
+  
+    // Check that the expiry date is at least one day greater than the current date
     const currentDate = new Date();
-    const inputExpiryDate = new Date(expiryDateISO);
-
-    if (inputExpiryDate <= currentDate) {
-        throw new ApiError(400, "Expiry date must be at least one day greater than the current date");
+    if (expiryDateISO <= currentDate) {
+      throw new ApiError(400, "Expiry date must be at least one day greater than the current date");
     }
-
-    // Continue with the rest of the donation logic
+  
+    // Find the restaurant from the database
     const restaurant = await Restaurant.findById(req.user._id).select("name pincode");
-
     if (!restaurant) {
-        throw new ApiError(404, "Restaurant not found");
+      throw new ApiError(404, "Restaurant not found");
     }
-
+  
+    // Create the food donation entry
     const foodDonation = new FoodDonation({
-        foodName,
-        quantity,
-        foodType,
-        expiryDate: inputExpiryDate,
-        schedulePickUp: schedulePickUpISO,
-        restaurantUser: req.user._id,
-        restaurantName: restaurant.name,
-        restaurantPincode: restaurant.pincode
+      foodName,
+      quantity,
+      foodType,
+      expiryDate: expiryDateISO,
+      schedulePickUp: schedulePickUpISO,
+      restaurantUser: req.user._id,
+      restaurantName: restaurant.name,
+      restaurantPincode: restaurant.pincode,
     });
-    console.log(foodDonation)
-
+  
     await foodDonation.save();
-
+  
     return res.status(201).json(new ApiResponse(201, foodDonation, "Food item donated successfully"));
-})
+  });
+  
 
 const foodDonationHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;
@@ -183,4 +198,4 @@ const foodDonationHistory = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, donationHistory, "Food donation history fetched successfully"));
 })
 
-export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem, foodDonationHistory } 
+export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem, foodDonationHistory }

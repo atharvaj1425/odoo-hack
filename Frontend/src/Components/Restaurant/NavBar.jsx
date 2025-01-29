@@ -7,7 +7,7 @@ const NavBar = () => {
   const [userEmail, setUserEmail] = useState("");
   
     useEffect(() => {
-      // Retrieve email from localStorage when the component is mounted
+      
       const email = localStorage.getItem("userEmail");
       if (email) {
         setUserEmail(email); 
