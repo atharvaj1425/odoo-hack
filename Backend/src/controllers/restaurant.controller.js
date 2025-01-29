@@ -139,39 +139,42 @@ const addFoodItem = asyncHandler(async (req, res) => {
 
 const donateFoodItem = asyncHandler(async (req, res) => {
     const { foodName, quantity, expiryDate, schedulePickUp, foodType } = req.body;
-  
+
     // Log to verify the incoming data format
+    console.log("Received foodName:", foodName);
+    console.log("Received quantity:", quantity);
     console.log("Received expiryDate:", expiryDate);
     console.log("Received schedulePickUp:", schedulePickUp);
-  
+    console.log("Received foodType:", foodType);
+
     // Ensure all fields are provided
     if (!(foodName && quantity && expiryDate && schedulePickUp && foodType)) {
       throw new ApiError(400, "All fields are required");
     }
-  
+
     // Convert dates from DD/MM/YYYY to ISO format (YYYY-MM-DD)
     const [expiryDay, expiryMonth, expiryYear] = expiryDate.split("/").map(Number);
     const [pickupDay, pickupMonth, pickupYear] = schedulePickUp.split("/").map(Number);
-  
+
     const expiryDateISO = new Date(expiryYear, expiryMonth - 1, expiryDay);
     const schedulePickUpISO = new Date(pickupYear, pickupMonth - 1, pickupDay);
-  
+
     if (isNaN(expiryDateISO.getTime()) || isNaN(schedulePickUpISO.getTime())) {
       throw new ApiError(400, "Invalid date format");
     }
-  
+
     // Check that the expiry date is at least one day greater than the current date
     const currentDate = new Date();
     if (expiryDateISO <= currentDate) {
       throw new ApiError(400, "Expiry date must be at least one day greater than the current date");
     }
-  
+
     // Find the restaurant from the database
     const restaurant = await Restaurant.findById(req.user._id).select("name pincode");
     if (!restaurant) {
       throw new ApiError(404, "Restaurant not found");
     }
-  
+
     // Create the food donation entry
     const foodDonation = new FoodDonation({
       foodName,
@@ -183,12 +186,11 @@ const donateFoodItem = asyncHandler(async (req, res) => {
       restaurantName: restaurant.name,
       restaurantPincode: restaurant.pincode,
     });
-  
+
     await foodDonation.save();
-  
+
     return res.status(201).json(new ApiResponse(201, foodDonation, "Food item donated successfully"));
-  });
-  
+});  
 
 const foodDonationHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;

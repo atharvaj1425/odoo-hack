@@ -18,7 +18,7 @@ export const generateAccessToken = async(userId) => {
     }
 } 
 
-export const loginVolunteer = asyncHandler(async (req, res) => {
+const loginVolunteer = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     if (!email) throw new ApiError(400, "Email is required");
@@ -85,7 +85,7 @@ export const loginVolunteer = asyncHandler(async (req, res) => {
 });
 
 // Get all food donations
-export const getAllFoodDonations = asyncHandler(async (req, res) => {
+const getAllFoodDonations = asyncHandler(async (req, res) => {
     const { volunteerId } = req.query;
 
     if (!volunteerId) {
@@ -109,11 +109,11 @@ export const getAllFoodDonations = asyncHandler(async (req, res) => {
 
 
 // Accept food donation by volunteer
-export const acceptFoodDonation = asyncHandler(async (req, res) => {
+const acceptFoodDonation = asyncHandler(async (req, res) => {
     const { donationId } = req.params; // Donation ID from URL
     const { volunteerId } = req.body; // Volunteer ID from request body
 
-    if (!(donationId || volunteerId)) {
+    if (!(donationId && volunteerId)) {
         throw new ApiError(400, "Donation ID and Volunteer ID are required");
     }
 
@@ -144,7 +144,7 @@ export const acceptFoodDonation = asyncHandler(async (req, res) => {
 });
 
 // Reject food donation by volunteer (optional)
-export const rejectFoodDonation = asyncHandler(async (req, res) => {
+const rejectFoodDonation = asyncHandler(async (req, res) => {
     const { donationId } = req.params; // Donation ID from URL
 
     if (!donationId) {
@@ -164,4 +164,4 @@ export const rejectFoodDonation = asyncHandler(async (req, res) => {
     );
 });
 
-// export { loginVolunteer, getDonations }
+export { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation }

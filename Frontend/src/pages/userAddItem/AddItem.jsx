@@ -34,7 +34,7 @@ const FoodInventory = () => {
 
     try {
       console.log("Sending data to backend:", formData);
-      const response = await axios.post("/api/v1/restaurants/addFoodItem", formData);
+      const response = await axios.post("/api/v1/users/addFoodItem", formData);
       console.log("Response from backend:", response.data);
 
       const newFoodItem = {

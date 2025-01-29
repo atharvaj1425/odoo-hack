@@ -1,5 +1,6 @@
 import mongoose,{Schema} from "mongoose";
-
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 const volunteerSchema = new mongoose.Schema({
     name: {
         type: String,

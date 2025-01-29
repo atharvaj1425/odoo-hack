@@ -21,7 +21,7 @@ const Sidebar = () => {
           <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
             <RiComputerLine className="mr-3 text-2xl" /> Dashboard
           </li>
-          <Link to="/FoodDetection">
+          <Link to="/form">
             <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
               <SlCalender className="mr-3 text-2xl" /> Add Food Items
             </li>

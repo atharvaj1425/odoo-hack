@@ -13,7 +13,7 @@ const Login = () => {
   const [retailerState, setRetailerState] = useState("login");
   const [consumerState, setConsumerState] = useState("login");
   const [ngoState, setNgoState] = useState("login");
-  const [farmerState, setFarmerState] = useState("login");
+  const [volunteerState, setVolunteerState] = useState("login");
 
   const [consumerEmail, setConsumerEmail] = useState("");
   const [consumerPassword, setConsumerPassword] = useState("");
@@ -27,9 +27,9 @@ const Login = () => {
   const [retailerPassword, setRetailerPassword] = useState("");
   const [retailerUsername, setRetailerUsername] = useState("");
 
-  const [farmerEmail, setFarmerEmail] = useState("");
-  const [farmerPassword, setFarmerPassword] = useState("");
-  const [farmerUsername, setFarmerUsername] = useState("");
+  const [volunteerEmail, setVolunteerEmail] = useState("");
+  const [volunteerPassword, setVolunteerPassword] = useState("");
+  const [volunteerUsername, setVolunteerUsername] = useState("");
 
 
  
@@ -197,49 +197,57 @@ const Login = () => {
       if (retailerState === "signup") setRetailerUsername(""); // Clear username only for signup
     }
   };
-  
 
-  const farmerSubmitHandler = async (e) => {
+  const volunteerSubmitHandler = async (e) => {
     e.preventDefault();
-
-    const farmerData = farmerState === "signup"
-      ? { email: farmerEmail, password: farmerPassword, username: farmerUsername }
-      : { email: farmerEmail, password: farmerPassword };
-
-    console.log("Submitting Farmer Data:", farmerData);
-
+  
+    const volunteerData =
+      retailerState === "signup"
+        ? { email: volunteerEmail, password: volunteerPassword, username: volunteerUsername }
+        : { email: volunteerEmail, password: volunteerPassword };
+  
+    console.log("Submitting volunteer Data:", volunteerData);
+  
     try {
-      const response = await axios.post(
-        farmerState === "signup" ? "/api/v1/farmers/signup" : "/api/v1/farmers/login",
-        farmerData
-      );
-
+      const response = await axios.post("/api/v1/volunteers/login", volunteerData);
+  
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
   
-        // Store success message in localStorage
-        localStorage.setItem("loginSuccess", "Logged in Successfully !");
+        // Store the token and user data in localStorage
+        localStorage.setItem("accessToken", data.data.accessToken); // Store accessToken
+        localStorage.setItem("userId", data.data.loggedInUser._id); // Store user ID
+        localStorage.setItem("userEmail", data.data.loggedInUser.email); // Store user email
+        localStorage.setItem("userName", data.data.loggedInUser.name); // Store user name
+
+        localStorage.setItem("loginSuccess", "Logged in Successfully!");
+        localStorage.setItem("data", JSON.stringify(data));
   
         // Display the toast success message before navigating
         toast.success("Logged in Successfully");
   
         // Delay the navigation to ensure toast shows up
         setTimeout(() => {
-          navigate("/consumer");
+          navigate("/volunteer");
         }, 1000); // Adjust the timeout as needed (e.g., 1500ms = 1.5s)
       } else {
         console.error("Error:", response.statusText);
+        toast.error("Invalid Credentials");
       }
     } catch (error) {
       console.error("Error during API call:", error);
+      toast.error("Invalid Credentials");
     } finally {
-      setFarmerEmail("");
-      setFarmerPassword("");
-      if (farmerState === "signup") setFarmerUsername("");  // Clear username only for signup
+      // Reset form fields
+      setVolunteerEmail("");
+      setVolunteerPassword("");
+      if (volunteerState === "signup") setVolunteerUsername(""); // Clear username only for signup
     }
   };
+  
 
+  
 
   const toggleFormState = (role) => {
     if (role === "retailer") {
@@ -250,14 +258,14 @@ const Login = () => {
       );
     } else if (role === "ngo") {
       setNgoState(ngoState === "login" ? "signup" : "login");
-    } else if (role === "farmer") {
-      setFarmerState(farmerState === "login" ? "signup" : "login");
+    } else if (role === "volunteer") {
+      setVolunteerState(volunteerState === "login" ? "signup" : "login");
     }
   };
 
   return (
 
-    <div className="flex justify-center items-center w-full bg-green-100 animate-fadeIn">
+    <div className="flex justify-center items-center w-full bg-green-100 animate-fadeIn mt-[-650px]">
       <div className="w-full p-6 bg-green-100 rounded-lg shadow-lg">
         {/* Title and Description */}
         <h1 className="text-5xl font-bold text-center mb-4 text-green-900 flex items-center justify-center">
@@ -275,54 +283,54 @@ const Login = () => {
 
           <div className="flex flex-col items-center p-6 rounded-lg shadow-md bg-green-200 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <FaTractor className="text-5xl mb-4 text-green-600" />
-            <h2 className="text-3xl font-semibold mb-4 text-green-800">Farmers</h2>
+            <h2 className="text-3xl font-semibold mb-4 text-green-800">Volunteers</h2>
             <div className="w-full mb-4">
-              <label htmlFor="farmer-email" className="block text-sm font-medium text-black mb-2">Email</label>
+              <label htmlFor="volunteer-email" className="block text-sm font-medium text-black mb-2">Email</label>
               <input
                 type="email"
-                id="farmer-email"
+                id="volunteer-email"
                 className="w-full px-4 py-2 border rounded-lg"
-                value={farmerEmail}
-                onChange={(e) => setFarmerEmail(e.target.value)}  // Bind email state
+                value={volunteerEmail}
+                onChange={(e) => setVolunteerEmail(e.target.value)}  // Bind email state
                 placeholder="Enter your email"
               />
             </div>
-            {farmerState === "signup" && (
+            {volunteerState === "signup" && (
               <div className="w-full mb-4">
-                <label htmlFor="farmer-username" className="block text-sm font-medium text-black mb-2">Username</label>
+                <label htmlFor="volunteer-username" className="block text-sm font-medium text-black mb-2">Username</label>
                 <input
                   type="text"
-                  id="farmer-username"
+                  id="volunteer-username"
                   className="w-full px-4 py-2 border rounded-lg"
-                  value={farmerUsername}
-                  onChange={(e) => setFarmerUsername(e.target.value)}  // Bind username state
+                  value={volunteerUsername}
+                  onChange={(e) => setVolunteerUsername(e.target.value)}  // Bind username state
                   placeholder="Enter your username"
                 />
               </div>
             )}
             <div className="w-full mb-4">
-              <label htmlFor="farmer-password" className="block text-sm font-medium text-black mb-2">Password</label>
+              <label htmlFor="volunteer-password" className="block text-sm font-medium text-black mb-2">Password</label>
               <input
                 type="password"
-                id="farmer-password"
+                id="volunteer-password"
                 className="w-full px-4 py-2 border rounded-lg"
-                value={farmerPassword}
-                onChange={(e) => setFarmerPassword(e.target.value)}  // Bind password state
+                value={volunteerPassword}
+                onChange={(e) => setVolunteerPassword(e.target.value)}  // Bind password state
                 placeholder="Enter your password"
               />
             </div>
             <button
               className="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-500"
-              onClick={farmerSubmitHandler}  // Trigger the submit handler
+              onClick={volunteerSubmitHandler}  // Trigger the submit handler
             >
               <FaLock className="mr-2 inline" />
-              {farmerState === "login" ? "Login" : "Sign Up"}
+              {volunteerState === "login" ? "Login" : "Sign Up"}
             </button>
             <p
               className="text-sm text-black mt-4 cursor-pointer"
-              onClick={() => setFarmerState((prevState) => prevState === "login" ? "signup" : "login")}  // Toggle between login and signup state
+              onClick={() => setVolunteerState((prevState) => prevState === "login" ? "signup" : "login")}  // Toggle between login and signup state
             >
-              {farmerState === "login" ? "Not having an account? Click here to register" : "Already have an account? Click here to login"}
+              {volunteerState === "login" ? "Not having an account? Click here to register" : "Already have an account? Click here to login"}
             </p>
           </div>
 
@@ -385,7 +393,7 @@ const Login = () => {
           {/* Consumer Form */}
           <div className="flex flex-col items-center p-6 rounded-lg shadow-md bg-green-200 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <FaPersonCircleCheck className="text-5xl mb-4 text-green-600" />
-            <h2 className="text-3xl font-semibold mb-4 text-green-800">Consumers</h2>
+            <h2 className="text-3xl font-semibold mb-4 text-green-800">Individual Users</h2>
             <form
               className="w-full"
               onSubmit={(e) => {

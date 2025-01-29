@@ -174,14 +174,17 @@ const addSingleMeal = asyncHandler(async (req, res) => {
     }
 
     // Create and save the new meal
+    const user = await User.findById(req.user._id);
+    console.log(user)
     const newMeal = new SingleMeal({
         mealDescription,
         quantity,
         schedulePickUp: new Date(schedulePickUp).toISOString(),
-        user: req.user._id, // Attach user reference
+        donor: req.user._id, // Attach user reference
+        pincode: user.pincode // Get the pincode of the user
     });
 
-    await SingleMeal.save();
+    await newMeal.save();
 
     res.status(201).json(newMeal);
 });

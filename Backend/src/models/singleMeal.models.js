@@ -17,6 +17,9 @@ const singleMealSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    pincode:{
+        type: String,
+    }
 }, { timestamps: true});
 
 export const SingleMeal = new mongoose.model("SingleMeal", singleMealSchema)

@@ -8,7 +8,7 @@ const Form = () => {
     foodName: "",
     quantity: "",
     expiryDate: "",
-    schedulePickup: "",
+    schedulePickUp: "", // Corrected field name
     foodType: "",
   });
 
@@ -38,7 +38,7 @@ const Form = () => {
     const formattedData = {
       ...formData,
       expiryDate: formatDate(formData.expiryDate),
-      schedulePickup: formatDate(formData.schedulePickup),
+      schedulePickUp: formatDate(formData.schedulePickUp), // Corrected field name
     };
 
     console.log("Formatted Data:", formattedData);
@@ -67,7 +67,7 @@ const Form = () => {
           foodName: "",
           quantity: "",
           expiryDate: "",
-          schedulePickup: "",
+          schedulePickUp: "", // Corrected field name
           foodType: "",
         });
       } else {
@@ -152,8 +152,8 @@ const Form = () => {
           <label className="block text-gray-700 font-semibold mb-2">Schedule Pickup</label>
           <input
             type="date"
-            name="schedulePickup"
-            value={formData.schedulePickup}
+            name="schedulePickUp" // Corrected field name
+            value={formData.schedulePickUp}
             onChange={handleChange}
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-900 transition"
             required
