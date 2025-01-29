@@ -4,14 +4,15 @@ import { FaHotel } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
 
 const Navbar = () => {
-  const [userDetails, setUserDetails] = useState(null);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const storedUserDetails = localStorage.getItem("userDetails");
-    if (storedUserDetails) {
-      setUserDetails(JSON.parse(storedUserDetails));
-    }
-  }, []);
+      // Retrieve email from localStorage when the component is mounted
+      const name = localStorage.getItem("userName");
+      if (name) {
+        setUserName(name); 
+      }
+    }, []);
 
   return (
     <div className="flex bg-white p-4 rounded-lg border-2 border-black shadow-lg mt-15 w-full justify-between">
@@ -40,19 +41,8 @@ const Navbar = () => {
       {/* User Icon with Username beside it on the right side */}
       <div className="flex items-center">
         <img src="/login.png" alt="Login" className="w-12 h-12 mr-2" />
-        <div className="text-lg font-bold">{userDetails ? userDetails.username || userEmail : "Guest"}</div>
-        {userDetails && (
-          <button
-            onClick={() => {
-              localStorage.removeItem("userDetails");
-              localStorage.removeItem("loginSuccess");
-              window.location.reload();
-            }}
-            className="bg-red-500 px-4 py-2 rounded ml-4"
-          >
-            Logout
-          </button>
-        )}
+        <div className="text-lg font-bold">{userName ? userName : "Guest"}</div>
+        
       </div>
     </div>
   );
