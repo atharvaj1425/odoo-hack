@@ -22,30 +22,22 @@ const Sidebar = () => {
             Dashboard
           </li>
 
-          <Link to="/recipe">
+          <Link to="/volunteer-current-donation">
             <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
               <SlCalender className="mr-3 text-2xl" />
-               Recipe
+               Current Donation
             </li>
           </Link>
-
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
+          <Link to="/volunteer-donation-history">
+          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
             <IoAnalytics className="mr-3 text-2xl" />
-            Real-time Analysis
+            Donation History
           </li>
-
-          <Link to="/consumer-form">
-  <li className="flex items-center hover:text-green-400 cursor-pointer  mt-7 px-1 py-2 rounded-lg">
-    <IoFastFood className="mr-3 text-2xl" />
-    Add Food Items
-  </li>
-</Link>
+          </Link>
+          
 
 
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
-            <GiTrophiesShelf className="mr-3 text-2xl" />
-            Shelf Optimize
-          </li>
+          
         </ul>
 
         {/* Donate Section (Moved Here) */}
@@ -58,7 +50,7 @@ const Sidebar = () => {
             alt="Donate Food"
             className="w-24 h-24 mb-4 mx-auto rounded-full shadow-md"
           />
-          <Link to = "/single-meal">
+          <Link to = "/">
                     <button className="w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition duration-300 shadow-lg">
                       Donate Food
                     </button>

@@ -34,9 +34,15 @@ const foodDonationSchema = new mongoose.Schema({
         ref: "Restaurant",
         required: true
     },
-    volunteer: {
-        type: Schema.Types.ObjectId,
-        ref: "Volunteer"
+    // volunteer: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Volunteer"
+    // },
+    acceptedById: {
+        type: String
+    },
+    acceptedBy: {
+        type: String 
     },
     status: { 
         type: String, 

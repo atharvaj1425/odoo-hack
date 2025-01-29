@@ -200,4 +200,27 @@ const foodDonationHistory = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, donationHistory, "Food donation history fetched successfully"));
 })
 
-export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem, foodDonationHistory }
+const checkDeliveryStatus = asyncHandler(async(req, res) => {
+        try {
+            const userId = req.user._id;
+    
+            // Find all donations where restaurantUser matches userId and status is NOT "Pending"
+            const deliveryStatus = await FoodDonation.find({
+                restaurantUser: userId,
+                status: { $ne: "Pending" } // Excludes documents where status is "Pending"
+            });
+    
+            res.status(200).json({
+                success: true,
+                message: "Delivery status fetched successfully",
+                data: deliveryStatus
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Error fetching delivery status",
+                error: error.message
+            });
+        }
+    })
+export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem, foodDonationHistory, checkDeliveryStatus }

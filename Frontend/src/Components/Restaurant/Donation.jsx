@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaBoxOpen, FaCalendarAlt, FaSortNumericUp, FaCalendarTimes, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 
 const FoodDonationHistory = () => {
   const [donations, setDonations] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchDonations = async () => {
       try {
@@ -41,7 +44,16 @@ const FoodDonationHistory = () => {
   }, []);
 
   return (
+    
     <div className="p-6 bg-green-100">
+    <div className="flex items-center justify-between mb-6">
+            <button
+              onClick={() => navigate('/retailer')}
+              className="p-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 focus:outline-none"
+            >
+              <FaArrowLeft className="text-xl" />
+            </button>
+          </div>
       <h2 className="text-3xl font-bold mb-6">Food Donation History</h2>
       <table className="min-w-full bg-white">
         <thead>

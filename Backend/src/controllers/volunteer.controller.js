@@ -101,12 +101,11 @@ const getAllFoodDonations = asyncHandler(async (req, res) => {
     // Fetch all food donations with "Pending" status
     const foodDonations = await FoodDonation.find({ status: "Pending" })
         .populate("restaurantUser", "name") // Always populate restaurantUser
-        .populate("volunteer", "name email") // Populate volunteer if it's assigned
+        // .populate("volunteer", "name email") // Populate volunteer if it's assigned
         .sort({ createdAt: -1 }); // Sort by latest
 
     return res.status(200).json(new ApiResponse(200, foodDonations, "Food donations fetched successfully"));
 });
-
 
 // Accept food donation by volunteer
 const acceptFoodDonation = asyncHandler(async (req, res) => {
@@ -123,6 +122,16 @@ const acceptFoodDonation = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Volunteer not found");
     }
 
+    // Check if the volunteer already has an active donation (i.e., "Accepted" or "Out for Delivery")
+    const existingDonation = await FoodDonation.findOne({
+        acceptedById: volunteerId,
+        status: { $in: ["Accepted", "Out for Delivery"] }, // Ongoing donations
+    });
+
+    if (existingDonation) {
+        throw new ApiError(400, "You can only accept one donation at a time. Complete the current donation first.");
+    }
+
     // Find the food donation
     const foodDonation = await FoodDonation.findById(donationId);
 
@@ -132,12 +141,12 @@ const acceptFoodDonation = asyncHandler(async (req, res) => {
 
     // Check if the donation is already accepted
     if (foodDonation.status !== "Pending") {
-        throw new ApiError(400, "This food donation has already been accepted or is no longer pending");
+        throw new ApiError(400, "This food donation has already been accepted or is no longer pending.");
     }
 
-    // Update the donation with the volunteer ID and change the status to "Accepted"
-    foodDonation.volunteer = volunteerId;
+    // Assign the volunteer and update status
     foodDonation.status = "Accepted";
+    foodDonation.acceptedById = volunteerId;
     await foodDonation.save();
 
     return res.status(200).json(new ApiResponse(200, foodDonation, "Food donation accepted successfully"));
@@ -164,4 +173,55 @@ const rejectFoodDonation = asyncHandler(async (req, res) => {
     );
 });
 
-export { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation }
+const getDonationHistory = asyncHandler(async(req, res) => {
+    const volunteerId  = req.user._id;
+
+    if (!volunteerId) {
+        throw new ApiError(400, "Volunteer ID is required");
+    }
+
+    // Check if the volunteer exists
+    const volunteer = await Volunteer.findById(volunteerId);
+    if (!volunteer) {
+        throw new ApiError(404, "Volunteer not found");
+    }
+
+    // Fetch all donations accepted by the volunteer
+    const donationHistory = await FoodDonation.find({ acceptedById: volunteerId })
+        .populate("restaurantUser", "name")
+        .sort({ createdAt: -1 });
+
+    return res.status(200).json(new ApiResponse(200, donationHistory, "Donation history fetched successfully"));
+})
+
+const getActiveDonation = asyncHandler(async(req, res) => {
+    const volunteerId  = req.user._id;
+
+    if (!volunteerId) {
+        throw new ApiError(400, "Volunteer ID is required");
+    }
+
+    // Check if the volunteer exists
+    const volunteer = await Volunteer.findById(volunteerId);
+    if (!volunteer) {
+        throw new ApiError(404, "Volunteer not found");
+    }
+    // Fetch the active donation for the volunteer
+    const activeDonation = await FoodDonation.findOne({
+        acceptedById: volunteerId,
+        status: { $in: ["Accepted", "Out for Delivery"] },
+    })
+    // .populate("restaurantUser", "name");
+
+    if (!activeDonation) {
+        throw new ApiError(404, "No active donation found");
+    }
+    // // Fetch all donations accepted by the volunteer
+    // const donationHistory = await FoodDonation.find({ acceptedById: volunteerId, })
+    //     .populate("restaurantUser", "name")
+    //     .sort({ createdAt: -1 });
+
+    return res.status(200).json(new ApiResponse(200, activeDonation, "Donation history fetched successfully"));
+})    
+
+export { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation, getDonationHistory, getActiveDonation }

@@ -1,18 +1,19 @@
 import { Router } from "express";
-import { loginNgoUser, acceptDonation, rejectDonation, donationRequest } from "../controllers/ngo.controller.js";
-import { getFoodDonations } from "../controllers/ngo.controller.js";
+import { loginNgoUser, acceptFoodDonation, rejectFoodDonation, donationRequest, getDonationHistory, getActiveDonation } from "../controllers/ngo.controller.js";
+import { getAllFoodDonations } from "../controllers/ngo.controller.js";
 import { verifyNgoJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.route("/login").post(loginNgoUser)
 
-router.route("/getDonations").get(verifyNgoJWT, getFoodDonations)
+router.route("/getDonations").get(verifyNgoJWT, getAllFoodDonations)
 
 router.route("/postDonationRequest").post(verifyNgoJWT, donationRequest)
 
-router.post("/accept", verifyNgoJWT, acceptDonation);
-
-// Reject a food donation (frontend-only handling)
-router.post("/reject", verifyNgoJWT, rejectDonation);
+router.post("/:donationId/accept",verifyNgoJWT, acceptFoodDonation); // Accept a donation
+router.post("/:donationId/reject",verifyNgoJWT, rejectFoodDonation); // Reject a donation (optional)
+// Reject a food donation without status change
+router.route("/donation-history").get(verifyNgoJWT, getDonationHistory);
+router.route("/active-donation").get(verifyNgoJWT, getActiveDonation);
 
 export default router;

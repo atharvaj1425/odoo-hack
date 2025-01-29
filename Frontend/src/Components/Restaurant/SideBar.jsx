@@ -26,12 +26,17 @@ const Sidebar = () => {
               <SlCalender className="mr-3 text-2xl" /> Add Food Items
             </li>
           </Link>
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
+          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
             <IoAnalytics className="mr-3 text-2xl" /> Daily Food Analysis
           </li>
           <Link to="/donate">
-            <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
-              <IoFastFood className="mr-3 text-2xl" /> Food History
+            <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
+              <IoFastFood className="mr-3 text-2xl" /> Food Donation History
+            </li>
+          </Link>
+          <Link to="/delivery-status">
+            <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
+              <IoFastFood className="mr-3 text-2xl" /> Delivery Status
             </li>
           </Link>
         </ul>

@@ -71,7 +71,7 @@ const FoodInventory = () => {
       {/* Back Button */}
       <div className="flex items-center justify-between mb-6">
         <button
-          onClick={() => navigate('/consumer')}
+          onClick={() => navigate('/retailer')}
           className="p-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 focus:outline-none"
         >
           <FaArrowLeft className="text-xl" />
