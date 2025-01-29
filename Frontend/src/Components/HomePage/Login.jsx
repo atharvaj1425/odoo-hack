@@ -40,7 +40,7 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
   
-    // Check for empty fields
+   
     if (!consumerEmail || !consumerPassword || (consumerState === "signup" && !consumerUsername)) {
       toast.error("Please fill in all the fields");
       return;
@@ -153,25 +153,28 @@ const Login = () => {
 
   const retailerSubmitHandler = async (e) => {
     e.preventDefault();
-
-    const retailerData = retailerState === "signup"
-      ? { email: retailerEmail, password: retailerPassword, username: retailerUsername }
-      : { email: retailerEmail, password: retailerPassword };
-
+  
+    const retailerData =
+      retailerState === "signup"
+        ? { email: retailerEmail, password: retailerPassword, username: retailerUsername }
+        : { email: retailerEmail, password: retailerPassword };
+  
     console.log("Submitting Retailer Data:", retailerData);
-
+  
     try {
-      const response = await axios.post(
-        "/api/v1/restaurants/login", 
-        retailerData
-      );
+      const response = await axios.post("/api/v1/restaurants/login", retailerData);
+  
       if (response.status === 200) {
         const data = response.data;
         console.log("Response Data:", data);
   
-        // Store success message in localStorage
-        localStorage.setItem("loginSuccess", "Logged in Successfully !");
-        localStorage.setItem("userEmail", retailerEmail);
+        // Store the token and user data in localStorage
+        localStorage.setItem("accessToken", data.data.accessToken); // Store accessToken
+        localStorage.setItem("userId", data.data.user._id); // Store user ID
+        localStorage.setItem("userEmail", data.data.user.name); // Store user email
+      
+        localStorage.setItem("loginSuccess", "Logged in Successfully!");
+        localStorage.setItem("data", data);
   
         // Display the toast success message before navigating
         toast.success("Logged in Successfully");
@@ -188,11 +191,13 @@ const Login = () => {
       console.error("Error during API call:", error);
       toast.error("Invalid Credentials");
     } finally {
+      // Reset form fields
       setRetailerEmail("");
       setRetailerPassword("");
-      if (retailerState === "signup") setRetailerUsername("");  // Clear username only for signup
+      if (retailerState === "signup") setRetailerUsername(""); // Clear username only for signup
     }
   };
+  
 
   const farmerSubmitHandler = async (e) => {
     e.preventDefault();

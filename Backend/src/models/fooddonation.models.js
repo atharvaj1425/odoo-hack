@@ -23,11 +23,11 @@ const foodDonationSchema = new mongoose.Schema({
     },
     restaurantPincode: {
         type: Number,
-        requiured: true
+       // requiured: true
     },
     restaurantName: {
         type: String,
-        required: true,
+        //required: true,
     },
     restaurantUser: {
         type: Schema.Types.ObjectId,

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 
 import Sidebar from '../../Components/Restaurant/SideBar';
 import Header from "../../Components/Restaurant/Header_1";
@@ -10,16 +10,33 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const RetailerPage = () => {
+  const [userId, setUserId] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+
   useEffect(() => {
-      const successMessage = localStorage.getItem("loginSuccess");
-  
-      if (successMessage) {
-        toast.success(successMessage);
-  
-        // Remove the message from localStorage so it doesn't show again on refresh
-        localStorage.removeItem("loginSuccess");
-      }
-    }, []); 
+    // Retrieve success message
+    const successMessage = localStorage.getItem("loginSuccess");
+
+    if (successMessage) {
+      toast.success(successMessage);
+
+      // Remove the success message from localStorage
+      localStorage.removeItem("loginSuccess");
+    }
+
+    // Retrieve accessToken and userId from localStorage
+    const storedAccessToken = localStorage.getItem("accessToken");
+    const storedUserId = localStorage.getItem("userId");
+
+    if (storedAccessToken && storedUserId) {
+      console.log("Access Token:", storedAccessToken);
+      console.log("User ID:", storedUserId);
+
+      // Save them to state for later use
+      setAccessToken(storedAccessToken);
+      setUserId(storedUserId);
+    }
+  }, []);
   return (
     <div className="animate-fadeIn">
       <NavBar />
