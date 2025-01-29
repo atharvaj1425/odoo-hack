@@ -129,6 +129,8 @@ const Login = () => {
         // Store success message in localStorage
         localStorage.setItem("loginSuccess", "Logged in Successfully !");
         localStorage.setItem("userEmail", ngoEmail);
+        localStorage.setItem("userId", data.data.user._id); // Store user ID
+
   
         // Display the toast success message before navigating
         toast.success("Logged in Successfully");

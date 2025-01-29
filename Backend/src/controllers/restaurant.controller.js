@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { Restaurant } from "../models/restaurants.models.js"
 import { FoodDonation } from "../models/fooddonation.models.js";
 import { RestaurantFoodItem } from "../models/restaurantFoodItems.models.js";
+import { Volunteer } from "../models/volunteer.models.js";
+import { Ngo } from "../models/ngo.models.js";
 //import { uploadToCloudinary  } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
@@ -200,27 +202,86 @@ const foodDonationHistory = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, donationHistory, "Food donation history fetched successfully"));
 })
 
-const checkDeliveryStatus = asyncHandler(async(req, res) => {
-        try {
-            const userId = req.user._id;
+// const checkDeliveryStatus = asyncHandler(async(req, res) => {
+//         try {
+//             const userId = req.user._id;
     
-            // Find all donations where restaurantUser matches userId and status is NOT "Pending"
-            const deliveryStatus = await FoodDonation.find({
-                restaurantUser: userId,
-                status: { $ne: "Pending" } // Excludes documents where status is "Pending"
-            });
+//             // Find all donations where restaurantUser matches userId and status is NOT "Pending"
+//             const deliveryStatus = await FoodDonation.find({
+//                 restaurantUser: userId,
+//                 status: { $ne: "Pending" } // Excludes documents where status is "Pending"
+//             });
     
-            res.status(200).json({
-                success: true,
-                message: "Delivery status fetched successfully",
-                data: deliveryStatus
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: "Error fetching delivery status",
-                error: error.message
-            });
-        }
-    })
+//             res.status(200).json({
+//                 success: true,
+//                 message: "Delivery status fetched successfully",
+//                 data: deliveryStatus
+//             });
+//         } catch (error) {
+//             res.status(500).json({
+//                 success: false,
+//                 message: "Error fetching delivery status",
+//                 error: error.message
+//             });
+//         }
+//     })
+
+const checkDeliveryStatus = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Fetch donations where restaurantUser matches userId and status is NOT "Pending"
+        const deliveryStatus = await FoodDonation.find({
+            restaurantUser: userId,
+            status: { $ne: "Pending" }
+        });
+
+        // Extract unique acceptedById values
+        const acceptedUserIds = deliveryStatus
+            .map(donation => donation.acceptedById)
+            .filter(id => id); // Remove null/undefined values
+
+        // Fetch names from Volunteer and Ngo schemas
+        const [volunteers, ngos] = await Promise.all([
+            Volunteer.find({ _id: { $in: acceptedUserIds } }).select("name"),
+            Ngo.find({ _id: { $in: acceptedUserIds } }).select("name")
+        ]);
+
+        // Create a lookup object for acceptedById -> name
+        const userMap = {};
+        volunteers.forEach(vol => (userMap[vol._id] = vol.name));
+        ngos.forEach(ngo => (userMap[ngo._id] = ngo.name));
+
+        // Update each FoodDonation entry with the acceptedBy name
+        await Promise.all(
+            deliveryStatus.map(async donation => {
+                if (userMap[donation.acceptedById]) {
+                    await FoodDonation.findByIdAndUpdate(donation._id, {
+                        acceptedBy: userMap[donation.acceptedById]
+                    });
+                }
+            })
+        );
+
+        // Fetch updated data after modifications
+        const updatedDeliveryStatus = await FoodDonation.find({
+            restaurantUser: userId,
+            status: { $ne: "Pending" }
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Delivery status updated and fetched successfully",
+            data: updatedDeliveryStatus
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error updating and fetching delivery status",
+            error: error.message
+        });
+    }
+});
+
 export { loginRestaurantUser, addFoodItem, getFoodItems, donateFoodItem, foodDonationHistory, checkDeliveryStatus }

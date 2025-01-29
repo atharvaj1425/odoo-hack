@@ -16,7 +16,7 @@ const NGO = () => {
           throw new Error("Ngo ID not found in local storage");
         }
 
-        const response = await axios.get(`/api/v1/ngos/getDonations?volunteerId=${ngoId}`, {
+        const response = await axios.get(`/api/v1/ngos/getDonations?ngoId=${ngoId}`, {
           withCredentials: true,
         });
         setFoodDonations(response.data.data); // Assuming APIResponse sends data in 'data' key
