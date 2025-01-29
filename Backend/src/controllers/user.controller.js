@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.models.js";
 import { FoodItem } from "../models/foodItems.models.js"
+import { SingleMeal } from "../models/singleMeal.models.js";
 //import { uploadToCloudinary  } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
@@ -164,4 +165,46 @@ const addFoodItem = asyncHandler(async (req, res) => {
     res.status(201).json(newFoodItem);
 });
 
-export { loginUser, addFoodItem, getFoodItems }
+const addSingleMeal = asyncHandler(async (req, res) => {
+    const { mealDescription, quantity, schedulePickUp } = req.body;
+
+    // Validate input
+    if (!(mealDescription && quantity && schedulePickUp)) {
+        throw new ApiError(400, "All fields are required");
+    }
+
+    // Create and save the new meal
+    const newMeal = new SingleMeal({
+        mealDescription,
+        quantity,
+        schedulePickUp: new Date(schedulePickUp).toISOString(),
+        user: req.user._id, // Attach user reference
+    });
+
+    await SingleMeal.save();
+
+    res.status(201).json(newMeal);
+});
+
+const getSingleMeals = asyncHandler(async (req, res) => {
+    const userId = req.user._id; // Assuming `req.user` is populated by authentication middleware
+
+    // Get the user's pincode
+    const user = await User.findById(userId);
+    const userPincode = user.pincode;
+
+    // Define the pincode range
+    const pincodeRange = [userPincode - 2, userPincode + 2];
+
+    // Find meals uploaded by users within the pincode range
+    const singleMeals = await SingleMeal.find({
+        user: { $ne: userId }, // Exclude meals uploaded by the user
+        // quantity: { $gte: 5 },
+        pincode: { $gte: pincodeRange[0], $lte: pincodeRange[1] }
+    });
+
+    return res.status(200).json(new ApiResponse(200, singleMeals, "Single meals fetched successfully"));
+});
+
+export { loginUser, addFoodItem, getFoodItems, addSingleMeal, getSingleMeals };
+

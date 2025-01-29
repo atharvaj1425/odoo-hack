@@ -77,4 +77,50 @@ const getFoodDonations = asyncHandler(async(req, res) => {
         new ApiResponse(200, donationsNearBy, "Food donations fetched successfully")
     );
 });
-export { loginNgoUser, getFoodDonations } 
+
+const acceptDonation = asyncHandler(async (req, res) => {
+    const { donationId } = req.body;
+    const ngoId = req.user._id;
+
+    // Ensure donationId is provided
+    if (!donationId) throw new ApiError(400, "Donation ID is required");
+
+    // Find the donation
+    const donation = await FoodDonation.findById(donationId);
+    if (!donation) throw new ApiError(404, "Donation not found");
+
+    // Ensure the donation is still pending
+    if (donation.status !== "Pending") {
+        throw new ApiError(400, "Only pending donations can be accepted");
+    }
+
+    // Update the donation's status and assign the NGO
+    donation.status = "Accepted";
+    donation.volunteer = ngoId;
+    await donation.save();
+
+    return res.status(200).json(
+        new ApiResponse(200, donation, "Donation accepted successfully")
+    );
+});
+
+const rejectDonation = asyncHandler(async (req, res) => {
+    const { donationId } = req.body;
+
+    // Ensure donationId is provided
+    if (!donationId) throw new ApiError(400, "Donation ID is required");
+
+    // Find the donation to confirm it exists
+    const donation = await FoodDonation.findById(donationId);
+    if (!donation) throw new ApiError(404, "Donation not found");
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, null, "Donation removed from your view"));
+});
+
+const donationRequest = asyncHandler(async(req,res) => {
+
+})
+
+export { loginNgoUser, getFoodDonations,  acceptDonation, rejectDonation, donationRequest } 
