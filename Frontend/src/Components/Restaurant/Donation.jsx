@@ -1,86 +1,74 @@
-import React, { useEffect, useState } from "react";
-import { CheckCircle, XCircle, Calendar, Package } from 'lucide-react'; // Icons from lucide-react
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const Donation = () => {
+const FoodDonationHistory = () => {
   const [donations, setDonations] = useState([]);
 
-  // Simulated data for demonstration
   useEffect(() => {
-    const fetchedDonations = [
-      {
-        foodName: "Biryani",
-        quantity: "10 kg",
-        expiryDate: "2025-01-30",
-        schedulePickUp: "2025-01-31",
-        status: "Pending"
-      },
-      {
-        foodName: "Pasta",
-        quantity: "5 kg",
-        expiryDate: "2025-02-10",
-        schedulePickUp: "2025-02-12",
-        status: "Completed"
-      }
-      // Add more donation data here...
-    ];
+    const fetchDonations = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const userId = localStorage.getItem('userId');
+        
+        // Ensure the user is authenticated
+        if (!accessToken || !userId) {
+          console.error('No access token or user ID found');
+          return;
+        }
 
-    setDonations(fetchedDonations);
+        console.log('Access Token:', accessToken);
+        console.log('User ID:', userId);
+
+        // Send the access token as a Bearer token in the Authorization header
+        const response = await axios.get("/api/v1/restaurants/donationHistory", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          withCredentials: true,
+        });
+
+        // Log the response data
+        console.log('Donation History Response:', response.data);
+
+        // Assuming donations are returned in response.data.data
+        setDonations(response.data.data);
+      } catch (error) {
+        console.error('Error fetching donation history:', error);
+      }
+    };
+
+    fetchDonations();
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-3xl font-semibold mb-4">Food Donation History</h2>
-        <p className="text-gray-500 mb-6">Here you can view the history of all food donations.</p>
-        
-        <table className="min-w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="px-4 py-2 font-medium text-gray-700">Food Name</th>
-              <th className="px-4 py-2 font-medium text-gray-700">Quantity</th>
-              <th className="px-4 py-2 font-medium text-gray-700">Expiry Date</th>
-              <th className="px-4 py-2 font-medium text-gray-700">Schedule Pickup</th>
-              <th className="px-4 py-2 font-medium text-gray-700">Status</th>
-              <th className="px-4 py-2 font-medium text-gray-700">Actions</th>
+    <div className="p-6 bg-green-100">
+      <h2 className="text-3xl font-bold mb-6">Food Donation History</h2>
+      <table className="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th className="py-2 px-4 border-b">Food Name</th>
+            <th className="py-2 px-4 border-b">Quantity</th>
+            <th className="py-2 px-4 border-b">Expiry Date</th>
+            <th className="py-2 px-4 border-b">Schedule Pickup</th>
+            <th className="py-2 px-4 border-b">Food Type</th>
+            <th className="py-2 px-4 border-b">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {donations.map((donation, index) => (
+            <tr key={index}>
+              <td className="py-2 px-4 border-b">{donation.foodName}</td>
+              <td className="py-2 px-4 border-b">{donation.quantity}</td>
+              <td className="py-2 px-4 border-b">{new Date(donation.expiryDate).toLocaleDateString()}</td>
+              <td className="py-2 px-4 border-b">{new Date(donation.schedulePickUp).toLocaleDateString()}</td>
+              <td className="py-2 px-4 border-b">{donation.foodType}</td>
+              <td className="py-2 px-4 border-b">{donation.status}</td>
             </tr>
-          </thead>
-          <tbody>
-            {donations.map((donation, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2 text-gray-800">{donation.foodName}</td>
-                <td className="px-4 py-2 text-gray-800">{donation.quantity}</td>
-                <td className="px-4 py-2 text-gray-800">{donation.expiryDate}</td>
-                <td className="px-4 py-2 text-gray-800">{donation.schedulePickUp}</td>
-                <td className="px-4 py-2">
-                  {donation.status === "Completed" ? (
-                    <span className="text-green-500 flex items-center">
-                      <CheckCircle className="mr-2" size={16} /> Completed
-                    </span>
-                  ) : (
-                    <span className="text-yellow-500 flex items-center">
-                      <XCircle className="mr-2" size={16} /> Pending
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex space-x-2">
-                    <button className="bg-blue-500 text-white p-2 rounded-lg flex items-center">
-                      <Calendar className="mr-2" size={16} />
-                      View Details
-                    </button>
-                    <button className="bg-gray-500 text-white p-2 rounded-lg flex items-center">
-                      <Package className="mr-2" size={16} />
-                      Edit
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default Donation;
+export default FoodDonationHistory;

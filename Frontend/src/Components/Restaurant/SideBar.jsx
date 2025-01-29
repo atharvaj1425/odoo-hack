@@ -6,6 +6,9 @@ import { BiLeaf } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+  const userEmail = localStorage.getItem('userEmail'); // Retrieve user email
+  const accessToken = localStorage.getItem('accessToken'); // Retrieve access token
+  
   return (
     <div className="w-1/5 bg-gray-900 text-white p-6 h-[120vh] flex flex-col">
       {/* Logo Section */}
@@ -26,9 +29,11 @@ const Sidebar = () => {
           <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
             <IoAnalytics className="mr-3 text-2xl" /> Daily Food Analysis
           </li>
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
-            <IoFastFood className="mr-3 text-2xl" /> Food History
-          </li>
+          <Link to="/donate">
+            <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
+              <IoFastFood className="mr-3 text-2xl" /> Food History
+            </li>
+          </Link>
         </ul>
         {/* Donate Section */}
         <div className="text-center mt-20">
@@ -40,6 +45,8 @@ const Sidebar = () => {
             </button>
           </Link>
         </div>
+        {/* Display User Info */}
+       
       </div>
     </div>
   );

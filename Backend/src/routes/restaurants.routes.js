@@ -7,5 +7,5 @@ router.route("/login").post(loginRestaurantUser)
 router.route("/addFoodItem").post(verifyRestaurantJWT, addFoodItem)
 router.route("/getfoodItems").get(verifyRestaurantJWT, getFoodItems)
 router.route("/donateFood").post(verifyRestaurantJWT, donateFoodItem)
-router.route("/donationHistory").post(verifyRestaurantJWT, foodDonationHistory)
+router.route("/donationHistory").get(verifyRestaurantJWT, foodDonationHistory)
 export default router;

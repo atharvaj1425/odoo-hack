@@ -20,16 +20,33 @@ const Form = () => {
     }));
   };
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = ("0" + d.getDate()).slice(-2);
+    const month = ("0" + (d.getMonth() + 1)).slice(-2); // Months are 0-based
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     // Log form data to verify inputs
     console.log("Form Data Submitted:", formData);
   
+    // Ensure dates are properly formatted to DD/MM/YYYY before sending
+    const formattedData = {
+      ...formData,
+      expiryDate: formatDate(formData.expiryDate),
+      schedulePickup: formatDate(formData.schedulePickup),
+    };
+
+    console.log("Formatted Data:", formattedData);
+  
     try {
       const response = await axios.post(
         "/api/v1/restaurants/donateFood",
-        formData,
+        formattedData,
         {
           withCredentials: true, // To include credentials like cookies
         }
