@@ -57,7 +57,7 @@ const Volunteer = () => {
       console.error("Failed to reject food donation:", err);
       toast.error("Failed to reject food donation. Please try again later.");
     }
-  };  
+  };
 
   return (
     <div className="bg-white shadow rounded-lg p-4 border border-black w-full min-h-screen">

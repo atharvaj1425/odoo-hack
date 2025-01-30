@@ -1,6 +1,6 @@
 import { Volunteer } from "../models/volunteer.models.js";
 import { verifyVolunteerJWT } from "../middlewares/auth.middleware.js";
-import { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation, getActiveDonation, getDonationHistory } from "../controllers/volunteer.controller.js"
+import { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation, getActiveDonation, getDonationHistory, updateDonationStatus } from "../controllers/volunteer.controller.js"
 import { Router } from "express";
 
 const router = Router();
@@ -12,6 +12,7 @@ router.post("/:donationId/reject",verifyVolunteerJWT, rejectFoodDonation); // Re
 // Reject a food donation without status change
 router.route("/donation-history").get(verifyVolunteerJWT, getDonationHistory);
 router.route("/active-donation").get(verifyVolunteerJWT, getActiveDonation);
+router.put('/update-status/:donationId',verifyVolunteerJWT, updateDonationStatus);
 
 
 

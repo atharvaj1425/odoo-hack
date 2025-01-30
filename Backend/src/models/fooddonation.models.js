@@ -46,7 +46,7 @@ const foodDonationSchema = new mongoose.Schema({
     },
     status: { 
         type: String, 
-        enum: ["Pending", "Accepted", "Out for Delivery", "Completed", "Expired"], 
+        enum: ["Pending", "Accepted", "Out for Delivery", "Delivered", "Expired"], 
         default: "Pending" 
     }
 }, {

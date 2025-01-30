@@ -197,13 +197,14 @@ const getSingleMeals = asyncHandler(async (req, res) => {
     const userPincode = user.pincode;
 
     // Define the pincode range
-    const pincodeRange = [userPincode - 2, userPincode + 2];
-
+    const minpincodeRange = userPincode - 2
+    const maxincodeRange = userPincode - 2
     // Find meals uploaded by users within the pincode range
     const singleMeals = await SingleMeal.find({
         user: { $ne: userId }, // Exclude meals uploaded by the user
         // quantity: { $gte: 5 },
-        pincode: { $gte: pincodeRange[0], $lte: pincodeRange[1] }
+                
+        pincode: { $gte: minpincodeRange, $lte: maxincodeRange }
     });
 
     return res.status(200).json(new ApiResponse(200, singleMeals, "Single meals fetched successfully"));

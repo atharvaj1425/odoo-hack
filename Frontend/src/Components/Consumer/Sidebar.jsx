@@ -17,7 +17,7 @@ const Sidebar = () => {
 
         {/* Navigation Menu */}
         <ul className="space-y-8 text-lg text-center mr-16">
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
+          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200mt-7s">
             <RiComputerLine className="mr-3 text-2xl" />
             Dashboard
           </li>
@@ -29,24 +29,26 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
+          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
             <IoAnalytics className="mr-3 text-2xl" />
             Real-time Analysis
           </li>
 
           <Link to="/consumer-form">
-  <li className="flex items-center hover:text-green-400 cursor-pointer  mt-7 px-1 py-2 rounded-lg">
+  <li className="flex items-center hover:text-green-400 cursor-pointer  mt-7 px-1 py-2 rounded-lg mt-7">
     <IoFastFood className="mr-3 text-2xl" />
     Add Food Items
   </li>
 </Link>
 
-
-          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200">
+          <Link to ="getSingleMeal">
+          <li className="flex items-center hover:text-green-400 cursor-pointer transition duration-200 mt-7">
             <GiTrophiesShelf className="mr-3 text-2xl" />
-            Shelf Optimize
+            Get Single Meal
           </li>
+          </Link>
         </ul>
+
 
         {/* Donate Section (Moved Here) */}
         <div className="text-center mt-20">

@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import {FoodItem } from "../models/foodItems.models.js"
 import { FoodDonation } from "../models/fooddonation.models.js";
-import { Volunteer } from "../models/volunteer.models.js";
+import { Volunteer } from "../models/volunteer.models.js"; 
 
 export const generateAccessToken = async(userId) => {
     try{
@@ -224,4 +224,34 @@ const getActiveDonation = asyncHandler(async(req, res) => {
     return res.status(200).json(new ApiResponse(200, activeDonation, "Donation history fetched successfully"));
 })    
 
-export { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation, getDonationHistory, getActiveDonation }
+
+// Controller for updating the status of a donation
+const updateDonationStatus = async (req, res) => {
+    const { donationId } = req.params; // Get the donation ID from the URL parameters
+    const { status } = req.body; // Get the new status from the request body
+  
+    try {
+      // Find the donation by its ID
+      const donation = await FoodDonation.findById(donationId);
+  
+      if (!donation) {
+        return res.status(404).json({ message: 'Donation not found' });
+      }
+  
+      // Update the donation's status
+      donation.status = status;
+  
+      // Save the updated donation to the database
+      await donation.save();
+  
+      // Return the updated donation
+      res.status(200).json({
+        message: 'Donation status updated successfully',
+        data: donation,
+      });
+    } catch (error) {
+      console.error('Error updating donation status:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+export { loginVolunteer, getAllFoodDonations, rejectFoodDonation, acceptFoodDonation, getDonationHistory, getActiveDonation,updateDonationStatus }

@@ -16,6 +16,7 @@ import Ngo from './pages/NGO_Page/Ngo';
 import { ChakraProvider } from '@chakra-ui/react';
 import Donation_page from './pages/DonationPage/Donation_page.jsx';
 import DonateSingleMeal from './pages/DonateSingleMeal/donate.jsx';
+import GetSingleMeal from './pages/GetSingleMealPage/getSingleMeal.jsx';
 
 
 
@@ -26,6 +27,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/consumer/getSingleMeal" element={<GetSingleMeal />} />
           <Route path="/volunteer" element={<VolunteerPage />} />
           <Route path="/consumer" element={<ConsumerPage />} />
           <Route path="/retailer" element={<RetailerPage />} />
