@@ -17,7 +17,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Donation_page from './pages/DonationPage/Donation_page.jsx';
 import DonateSingleMeal from './pages/DonateSingleMeal/donate.jsx';
 import GetSingleMeal from './pages/GetSingleMealPage/getSingleMeal.jsx';
-
+import NgoCurrentDonationPage from './pages/NgoCurrentDonationPage/currentdonation.jsx'
 
 
 
@@ -42,6 +42,7 @@ function App() {
           <Route path="/volunteer-current-donation" element={<VolunteerCurrentPage/>} />
           <Route path="/volunteer-donation-history" element={<VolunteerHistoryPage/>} />
           <Route path="/delivery-status" element={<DeliveryStatusPage />} />
+          <Route path="/current-donation" element={<NgoCurrentDonationPage />} />
         </Routes>
       </div>
     </Router>

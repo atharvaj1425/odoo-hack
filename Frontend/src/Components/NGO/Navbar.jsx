@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom";
 import React, { useEffect,useState } from 'react';
 
 import { FaHotel } from "react-icons/fa";
@@ -30,9 +30,11 @@ const NavBar = () => {
   <div className="text-lg font-bold text-black hover:text-green-800 pb-1 border-b-4 border-transparent hover:border-green-800">
     All Data
   </div>
+  <Link to="/current-donation">
   <div className="text-lg font-bold text-black hover:text-green-800 pb-1 border-b-4 border-transparent hover:border-green-800">
-    Individual Data
+    Current Donation
   </div>
+  </Link>
   <div className="text-lg font-bold text-black hover:text-green-800 pb-1 border-b-4 border-transparent hover:border-green-800">
     Network
   </div>

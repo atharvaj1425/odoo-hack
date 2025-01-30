@@ -13,6 +13,7 @@ const GetSingleMeal = () => {
         const response = await axios.get('/api/v1/users/getMeal');
         if (response.data && response.data.data) {
           setMeals(response.data.data);
+          console.log(response.data.data);
         } else {
           setError('No meals available');
         }
