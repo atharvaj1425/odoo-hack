@@ -1,0 +1,123 @@
+<html><head><meta charset="UTF-8"><title>Surplus Food Form</title>
+    <link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" type="text/css"><script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+    </head><body class="zf-backgroundBg"><!-- Change or deletion of the name attributes in the input tag will lead to empty values on record submission-->
+    <div class="zf-templateWidth"><form action='/predict' name='form' method='POST' onSubmit='javascript:document.charset="UTF-8"; return zf_ValidateAndSubmit();' accept-charset='UTF-8' enctype='multipart/form-data' id='form'><input type="hidden" name="zf_referrer_name" value=""><!-- To Track referrals , place the referrer name within the " " in the above hidden input field -->
+    <input type="hidden" name="zf_redirect_url" value=""><!-- To redirect to a specific page after record submission , place the respective url within the " " in the above hidden input field -->
+    <input type="hidden" name="zc_gad" value=""><!-- If GCLID is enabled in Zoho CRM Integration, click details of AdWords Ads will be pushed to Zoho CRM -->
+    <div class="zf-templateWrapper"><!---------template Header Starts Here---------->
+    <ul class="zf-tempHeadBdr"><li class="zf-tempHeadContBdr"><h2 class="zf-frmTitle"><em>Surplus food form</em></h2>
+    <p class="zf-frmDesc"></p>
+    <div class="zf-clearBoth"></div></li></ul><!---------template Header Ends Here---------->
+    <!---------template Container Starts Here---------->
+    <div class="zf-subContWrap zf-topAlign"><ul>
+    <!-- -------Section Starts Here----------> 
+    <!-- <li class="zf-tempFrmWrapper zf-section"><h2>Surplus Food Form</h2> -->
+    <p></p></li><!---------Section Ends Here--------  -->
+    <!---------Single Line Starts Here---------->
+    <li class="zf-tempFrmWrapper zf-large"><label class="zf-labelName"> 
+    Restaurant ID 
+    </label>
+    <div class="zf-tempContDiv">
+    <span> <input type="text" name="restId" checktype="c1" value="" maxlength="255" fieldType=1 placeholder=""/></span> <p id="SingleLine_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Single Line Ends Here---------->
+    <!---------Dropdown Starts Here---------->
+    <li class="zf-tempFrmWrapper zf-large"><label class="zf-labelName">
+    Food Type
+    </label>
+    <div class="zf-tempContDiv">
+    <select class="zf-form-sBox" name="food_type" checktype="c1">
+    <option selected="true" value="-Select-">-Select-</option>
+    <option value="Khichdi">Khichdi</option>
+    <option value="Pakora">Pakora</option>
+    <option value="Samosa">Samosa</option>
+    <option value="Biryani">Biryani</option>
+    <option value="Curry">Curry</option>
+    <option value="Dosa">Dosa</option>
+    <option value="Paratha">Paratha</option>
+    <option value="Pulao">Pulao</option>
+    <option value="Pav&#x20;Bhaji">Pav Bhaji</option>
+    <option value="Thali">Thali</option>
+    <option value="Naan">Naan</option>
+    <option value="Dal&#x20;Makhani">Dal Makhani</option>
+    <option value="Butter&#x20;Chicken">Butter Chicken</option>
+    <option value="Palak&#x20;Paneer">Palak Paneer</option>
+    <option value="Chole&#x20;Bhature">Chole Bhature</option>
+    <option value="Vada&#x20;Pav">Vada Pav</option>
+    <option value="Idli">Idli</option>
+    <option value="Uttapam">Uttapam</option>
+    </select><p id="Dropdown_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Dropdown Ends Here---------->
+    <!---------Dropdown Starts Here---------->
+    <li class="zf-tempFrmWrapper zf-large"><label class="zf-labelName">
+    Weather Conditions
+    </label>
+    <div class="zf-tempContDiv">
+    <select class="zf-form-sBox" name="weather" checktype="c1">
+    <option selected="true" value="-Select-">-Select-</option>
+    <option value="Clear">Clear</option>
+    <option value="Cloudy">Cloudy</option>
+    <option value="Humid">Humid</option>
+    <option value="Heavy Rain">Heavy Rain</option>
+    <option value="Light Rain">Light Rain</option>
+    <option value="Moderate Rain">Moderate Rain</option>
+    <option value="Pleasant">Pleasant</option>
+    <option value="Sunny">Sunny</option>
+    </select><p id="Dropdown1_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Dropdown Ends Here---------->
+    <!---------Dropdown Starts Here---------->
+    <li class="zf-tempFrmWrapper zf-large"><label class="zf-labelName">
+    Festival
+    </label>
+    <div class="zf-tempContDiv">
+    <select class="zf-form-sBox" name="festival" checktype="c1">
+    <option selected="true" value="-Select-">-Select-</option>
+    <option value="NoFestival">NoFestival</option>
+    <option value="Diwali">Diwali</option>
+    <option value="Holi">Holi</option>
+    <option value="Eid">Eid</option>
+    <option value="Christmas">Christmas</option>
+    <option value="New&#x20;Year">New Year</option>
+    <option value="Navratri">Navratri</option>
+    <option value="Durga Puja">Durga Puja</option>
+    <option value="Local Fair">Local Fair</option>
+    
+    </select><p id="Dropdown2_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Dropdown Ends Here---------->
+    <!---------Decision Starts Here----------> 
+    <li class="zf-tempFrmWrapper zf-decesion "><div class="zf-tempContDiv">
+    <input type="checkbox" checktype="c1" id="DecisionBox" name="is_weekend" value="1"/>
+    <label for="DecisionBox" class="zf-labelName">Is it a Weekend &#x3f;
+    </label>
+    <p id="DecisionBox_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Decision Ends Here----------> 
+    <!---------Decimal Starts Here----------> 
+    <li class="zf-tempFrmWrapper zf-large"><label class="zf-labelName"> 
+    Quantity Prepared &#x28;kg&#x29;&#x3a; 
+    </label>
+    <div class="zf-tempContDiv">
+    <span> <input type="text" name="quantity_prepared" checktype="c3" value="" maxlength="50" placeholder=""/></span> <p id="Decimal1_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Decimal Ends Here----------> 
+    <!---------Decimal Starts Here----------> 
+    <li class="zf-tempFrmWrapper zf-large"><label class="zf-labelName"> 
+    Quantity Wasted &#x28;kg&#x29;&#x3a; 
+    </label>
+    <div class="zf-tempContDiv">
+    <span> <input type="text" name="quantity_wasted" checktype="c3" value="" maxlength="50" placeholder=""/></span> <p id="Decimal2_error" class="zf-errorMessage" style="display:none;">Invalid value</p>
+    </div><div class="zf-clearBoth"></div></li><!---------Decimal Ends Here----------> 
+    </ul></div><!---------template Container Starts Here---------->
+    <ul><li class="zf-fmFooter"><button class="zf-submitColor" >Submit</button></li></ul></div><!-- 'zf-templateWrapper' ends --></form>
+    {% if prediction %}
+        <div style="font-size: 30px; text-align: center; font-weight: bold;">
+            Prediction: {{ prediction }}
+        </div>
+    {% endif %}
+        {% if error %}
+            <p style="color: red;">Error: {{ error }}</p>
+        {% endif %}
+    </div><!-- 'zf-templateWidth' ends -->
+    <script type="text/javascript">var zf_DateRegex = new RegExp("^(([0][1-9])|([1-2][0-9])|([3][0-1]))[-](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[-](?:(?:19|20)[0-9]{2})$");
+    var zf_MonthYearRegex = new RegExp("^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[-](?:(?:19|20)[0-9]{2})$");
+    var zf_MandArray = []; 
+    var zf_FieldArray = [ "SingleLine", "Dropdown", "Dropdown1", "Dropdown2", "DecisionBox", "Decimal1", "Decimal2"]; 
+    var isSalesIQIntegrationEnabled = false;
+    var salesIQFieldsArray = [];</script></body></html>

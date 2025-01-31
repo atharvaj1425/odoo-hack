@@ -267,7 +267,7 @@ const Login = () => {
 
   return (
 
-    <div className="flex justify-center items-center w-full bg-green-100 animate-fadeIn mt-[-650px]">
+    <div className="flex justify-center items-center w-full bg-green-100 animate-fadeIn">
       <div className="w-full p-6 bg-green-100 rounded-lg shadow-lg">
         {/* Title and Description */}
         <h1 className="text-5xl font-bold text-center mb-4 text-green-900 flex items-center justify-center">
